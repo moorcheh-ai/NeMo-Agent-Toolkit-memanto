@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+# Holds a path to ../memanto until memanto 0.2.28 is on PyPI.
+uv.lock
