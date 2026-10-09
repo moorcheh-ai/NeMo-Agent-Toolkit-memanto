@@ -1,0 +1,29 @@
+# Automatic memory: every user message is saved, relevant memories are recalled
+# before the agent answers, and the agent's replies are saved.
+# Needs MOORCHEH_API_KEY and NVIDIA_API_KEY.
+memory:
+  user_memory:
+    _type: memanto
+
+llms:
+  nim_llm:
+    _type: nim
+    model_name: meta/llama-3.3-70b-instruct
+    temperature: 0.0
+
+functions:
+  current_datetime:
+    _type: current_datetime
+  my_react_agent:
+    _type: react_agent
+    llm_name: nim_llm
+    tool_names: [current_datetime]
+
+workflow:
+  _type: auto_memory_agent
+  description: Assistant that remembers each user
+  inner_agent_name: my_react_agent
+  memory_name: user_memory
+  llm_name: nim_llm
+  search_params:
+    top_k: 5

@@ -1,0 +1,30 @@
+# Memory tools: the agent decides when to save, recall or forget.
+# Needs MOORCHEH_API_KEY and NVIDIA_API_KEY.
+memory:
+  user_memory:
+    _type: memanto
+
+llms:
+  nim_llm:
+    _type: nim
+    model_name: meta/llama-3.3-70b-instruct
+    temperature: 0.0
+
+functions:
+  add_memory:
+    _type: add_memory
+    memory: user_memory
+    user_id: alex
+  get_memory:
+    _type: get_memory
+    memory: user_memory
+    user_id: alex
+  delete_memory:
+    _type: delete_memory
+    memory: user_memory
+    user_id: alex
+
+workflow:
+  _type: react_agent
+  llm_name: nim_llm
+  tool_names: [add_memory, get_memory, delete_memory]
