@@ -51,8 +51,18 @@ jobs:
         uv venv --python "$PYTHON"
         uv pip install ".[test]" "nvidia-nat-core==$NAT" "nvidia-nat-langchain==$NAT" "nvidia-nat-test==$NAT"
 
+    # Asks the registry directly: `nat info components` draws its table with
+    # different border characters per platform, so its text is not parsed.
     - name: Check the toolkit discovers the plugin
-      run: uv run --no-sync nat info components -t memory -q memanto | grep -q "| memanto"
+      run: |
+        uv run --no-sync python -c "
+        from nat.cli.type_registry import GlobalTypeRegistry
+        from nat.plugins.memanto.memory import MemantoMemoryConfig
+        from nat.runtime.loader import PluginTypes, discover_and_register_plugins
+        discover_and_register_plugins(PluginTypes.ALL)
+        GlobalTypeRegistry.get().get_memory(MemantoMemoryConfig)
+        print('memanto memory backend is registered')
+        "
 
     - name: Run unit and loader tests
       run: uv run --no-sync pytest -v
