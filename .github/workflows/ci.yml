@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Run ruff
+      run: |
+        uvx ruff check .
+        uvx ruff format --check .
+
+  test:
+    # The last two toolkit minor releases, each on a supported Python.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - python: "3.11"
+          nat: "1.8.0"
+        - python: "3.13"
+          nat: "1.9.0"
+    name: test (Python ${{ matrix.python }}, toolkit ${{ matrix.nat }})
+    runs-on: ubuntu-latest
+    env:
+      # Empty on forks and when the secret is not set; the live tests are skipped then.
+      MOORCHEH_API_KEY: ${{ secrets.MOORCHEH_API_KEY }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Install plugin and toolkit
+      env:
+        PYTHON: ${{ matrix.python }}
+        NAT: ${{ matrix.nat }}
+      run: |
+        uv venv --python "$PYTHON"
+        uv pip install ".[test]" "nvidia-nat-core==$NAT" "nvidia-nat-langchain==$NAT" "nvidia-nat-test==$NAT"
+
+    - name: Check the toolkit discovers the plugin
+      run: uv run --no-sync nat info components -t memory -q memanto | grep -q "| memanto"
+
+    - name: Run unit and loader tests
+      run: uv run --no-sync pytest -v
+
+    - name: Run live integration tests
+      if: env.MOORCHEH_API_KEY != ''
+      run: uv run --no-sync pytest --run_integration -m integration -v

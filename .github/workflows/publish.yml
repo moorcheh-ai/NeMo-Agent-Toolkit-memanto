@@ -1,0 +1,47 @@
+name: Publish
+
+# Push a tag matching the version in pyproject.toml, e.g. v0.1.0.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
+    - name: Check the tag matches the package version
+      env:
+        TAG: ${{ github.ref_name }}
+      run: |
+        DECLARED=$(grep -m1 '^version = ' pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+        if [ "$TAG" != "v$DECLARED" ]; then
+          echo "::error::Tag is $TAG but pyproject.toml declares $DECLARED"
+          exit 1
+        fi
+
+    - name: Run tests
+      run: |
+        uv sync --extra test
+        uv run pytest -v
+
+    - name: Build
+      run: uv build --out-dir dist
+
+    # Same account-scoped token the memanto integrations publish with, so the
+    # first release can create the PyPI project.
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        packages-dir: dist
+        skip-existing: true
