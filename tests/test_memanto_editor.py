@@ -12,8 +12,8 @@ from memanto import NothingToExtractError
 from memanto.app.utils.errors import AgentNotFoundError
 from nat.plugin_api import MemoryItem
 
-from nat.plugins.memanto import memanto_editor
-from nat.plugins.memanto.memanto_editor import MemantoEditor
+from nemo_agent_toolkit_memanto import memanto_editor
+from nemo_agent_toolkit_memanto.memanto_editor import MemantoEditor
 
 
 class FakeMemanto:

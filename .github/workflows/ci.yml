@@ -57,7 +57,7 @@ jobs:
       run: |
         uv run --no-sync python -c "
         from nat.cli.type_registry import GlobalTypeRegistry
-        from nat.plugins.memanto.memory import MemantoMemoryConfig
+        from nemo_agent_toolkit_memanto.memory import MemantoMemoryConfig
         from nat.runtime.loader import PluginTypes, discover_and_register_plugins
         discover_and_register_plugins(PluginTypes.ALL)
         GlobalTypeRegistry.get().get_memory(MemantoMemoryConfig)

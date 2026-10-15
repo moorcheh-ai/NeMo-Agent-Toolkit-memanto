@@ -17,7 +17,7 @@ from nat.plugin_api import FunctionInfo
 from nat.plugin_api import MemoryItem
 from nat.plugin_api import register_function
 
-from nat.plugins.memanto.memanto_editor import MemantoEditor
+from nemo_agent_toolkit_memanto.memanto_editor import MemantoEditor
 
 pytestmark = [
     pytest.mark.integration,
@@ -151,7 +151,7 @@ async def test_memory_tools_round_trip(prefix):
     from nat.tool.memory_tools.delete_memory_tool import DeleteToolConfig
     from nat.tool.memory_tools.get_memory_tool import GetToolConfig
 
-    from nat.plugins.memanto.memory import MemantoMemoryConfig
+    from nemo_agent_toolkit_memanto.memory import MemantoMemoryConfig
 
     # Toolkit 1.9 takes the identity from tool config; 1.8 takes it from the tool input.
     identity_in_config = "user_id" in AddToolConfig.model_fields

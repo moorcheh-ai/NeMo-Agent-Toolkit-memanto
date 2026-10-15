@@ -129,7 +129,13 @@ Tool-level `user_id` and `user_id_resolver` need NeMo Agent Toolkit 1.9 or later
 | `remove_items(user_id=...)` | Deletes the user's agent and all of its memories |
 | `remove_items(user_id=..., memory_id=...)` | Deletes one memory |
 
-`MemantoEditor.agent_id_for(user_id)` returns the agent that holds a user's memories, so you can inspect them with the `memanto` CLI or UI.
+`MemantoEditor.agent_id_for(user_id)` returns the agent that holds a user's memories, so you can inspect them with the `memanto` CLI or UI:
+
+```python
+from nemo_agent_toolkit_memanto.memanto_editor import MemantoEditor
+
+print(MemantoEditor(agent_prefix="nat").agent_id_for("alex"))
+```
 
 ## Supported versions
 

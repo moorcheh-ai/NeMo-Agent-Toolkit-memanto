@@ -40,7 +40,7 @@ class MemantoMemoryConfig(MemoryBaseConfig, name="memanto"):
 
 @register_memory(config_type=MemantoMemoryConfig)
 async def memanto_memory_client(config: MemantoMemoryConfig, _builder: Builder) -> AsyncGenerator[MemoryEditor, None]:
-    from nat.plugins.memanto.memanto_editor import MemantoEditor
+    from nemo_agent_toolkit_memanto.memanto_editor import MemantoEditor
 
     yield MemantoEditor(
         api_key=get_secret_value(config.api_key),

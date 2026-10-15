@@ -11,14 +11,14 @@ from nat.runtime.loader import PluginTypes
 from nat.runtime.loader import discover_and_register_plugins
 from pydantic import ValidationError
 
-from nat.plugins.memanto import memanto_editor
-from nat.plugins.memanto.memanto_editor import MemantoEditor
-from nat.plugins.memanto.memory import MemantoMemoryConfig
+from nemo_agent_toolkit_memanto import memanto_editor
+from nemo_agent_toolkit_memanto.memanto_editor import MemantoEditor
+from nemo_agent_toolkit_memanto.memory import MemantoMemoryConfig
 
 
 def test_entry_point_is_declared():
     (entry_point,) = [ep for ep in entry_points(group="nat.plugins") if ep.name == "nat_memanto"]
-    assert entry_point.value == "nat.plugins.memanto.register"
+    assert entry_point.value == "nemo_agent_toolkit_memanto.register"
     entry_point.load()
 
 

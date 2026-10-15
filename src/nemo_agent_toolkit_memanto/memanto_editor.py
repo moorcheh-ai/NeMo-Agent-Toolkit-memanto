@@ -5,12 +5,11 @@ import asyncio
 import hashlib
 from typing import Any
 
-from nat.plugin_api import MemoryEditor
-from nat.plugin_api import MemoryItem
-
 from memanto import Memanto
 from memanto import NothingToExtractError
 from memanto.app.utils.errors import AgentNotFoundError
+from nat.plugin_api import MemoryEditor
+from nat.plugin_api import MemoryItem
 
 # Recall fields copied into MemoryItem.metadata; "id" is exposed as "memory_id".
 _METADATA_FIELDS = ("type", "title", "confidence", "provenance", "source", "created_at", "updated_at")
